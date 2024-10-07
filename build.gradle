@@ -1,0 +1,352 @@
+plugins {
+    id("application") // enabling the plugin here
+    id("java")
+    id 'java-library'
+    id 'maven-publish'
+    id 'org.jreleaser' version '1.14.0'
+    id 'signing'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.24'
+}
+group = 'one.empty3.libs'
+version = 'commons-mp'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+Properties properties = new Properties()
+try {
+    // Other configuration here
+    File propertiesFile = new File('../private.properties/gradle.properties')
+    propertiesFile.withInputStream {
+        properties.load(it)
+    }
+} catch (Exception ex) {
+    ex.printStackTrace()
+}
+
+
+Properties propertiesReleaseConfig = new Properties()
+try {
+    // Other configuration here
+    File propertiesFile = new File('C:\\Users\\manue\\.jreleaser\\config.properties')
+    propertiesFile.withInputStream {
+        propertiesReleaseConfig.load(it)
+    }
+} catch (Exception ex) {
+    ex.printStackTrace()
+}
+
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+def load = properties
+java {
+    withSourcesJar()
+}
+
+
+signing {
+    def signingKey = load.get("signing.keyId")
+    def signingPassword = load.get("signing.password")
+
+    useGpgCmd()
+    //useInMemoryPgpKeys(signingKey, signingPassword)
+
+    sign publishing.publications
+    sign configurations.archives
+}
+
+
+repositories {
+    google()
+    mavenCentral()
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2/")
+    }
+    maven {
+        url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    }
+    maven {
+        url = uri("https://repository.sonatype.org/content/groups/public/")
+    }
+    maven {
+        url = uri("https://mvnrepository.com/")
+    }
+    maven {
+        url = uri("https://maven.scijava.org/content/repositories/public/")
+    }
+    maven {
+        url = uri("https://plugins.gradle.org/m2/")
+    }
+    maven {
+        url "https://maven.jzy3d.org/releases/"
+    }
+    maven {
+        url "https://www.jetbrains.com/intellij-repository/releases"
+    }
+    flatDir dirs: "${rootDir}/lib"
+}
+
+
+dependencies {
+    def googleJavaFormatVersion = '1.6'
+//    implementation(kotlin("stdlib"))
+    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    implementation 'junit:junit:4.13.2'
+    testImplementation project(path: ':')
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'junit:junit:4.13.2'
+    def jogl = '2.3.2'
+    implementation "org.jogamp.jogl:jogl-all:$jogl"
+    implementation group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: "$jogl"
+    implementation group: 'org.jogamp.jogl', name: 'jogl-all-main', version: "$jogl"
+    //implementation 'ai.djl:api:0.21.0'
+    implementation("org.jcodec:jcodec-javase:0.2.5")
+    implementation("org.jcodec:jcodec-javase:0.2.5")
+    implementation("org.jogamp.jogl:jogl-all-main:$jogl")
+    implementation("com.miglayout:miglayout:3.7.4")
+    implementation("xom:xom:1.3.9")
+    implementation("com.jgoodies:jgoodies-common:1.8.1")
+    implementation("com.jgoodies:jgoodies-forms:1.9.0")
+    implementation('xerces:xercesImpl:2.12.2')
+    implementation 'com.formdev:flatlaf:3.0'
+    implementation("org.jdesktop:beansbinding:1.2.1")
+    implementation("com.github.sarxos:webcam-capture:0.3.12")
+    implementation group: 'commons-net', name: 'commons-net', version: '3.9.0'
+    implementation("org.jdom:jdom2:2.0.6.1")
+    implementation("org.apache.servicemix.bundles:org.apache.servicemix.bundles.jdom:2.0.6.1_1")
+    implementation 'com.jetbrains.intellij.java:java-gui-forms-rt:203.7148.30'
+    implementation 'org.jetbrains:annotations:24.0.0'
+    testImplementation('org.junit.jupiter:junit-jupiter:5.9.2')
+    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20"
+    implementation 'org.apache.santuario:xmlsec:4.0.1'
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
+    implementation platform('com.google.cloud:libraries-bom:26.39.0')
+    implementation 'com.google.cloud:google-cloud-vision'
+    implementation 'com.google.apis:google-api-services-vision:v1-rev20231219-2.0.0'
+    implementation 'com.google.cloud:google-cloud-vision:3.41.0'
+    implementation platform('com.google.cloud:libraries-bom:26.38.0')
+    implementation 'com.google.cloud:google-cloud-storage'
+    implementation "com.google.apis:google-api-services-vision:v1-rev20231219-2.0.0"
+    implementation "com.google.auth:google-auth-library-oauth2-http:1.23.0"
+    implementation "com.google.guava:guava:16.0.1"
+    implementation "com.google.http-client:google-http-client-jackson2:1.44.2"
+}
+def versionName = '2024.9.2'
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'one.empty3.libs'
+            artifactId = 'commmons-mp'
+            version = '2024.10.7'
+            from components.java
+            project.tasks.withType(Sign) {
+                signatures.all {
+
+                }
+            }
+
+            // The pom can be enriched as usual
+            pom {
+                name = 'empty3-library-3d'
+                description = 'Common class for images and colors'
+                packaging 'jar'
+                url = "https://github.com/manuelddahmen/empty3-library-3d"
+                version '2024.9.22'
+                inceptionYear = '2008'
+                licenses {
+                    license {
+                        name = "Apache version 2"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0"
+                        distribution = "repo"
+                    }
+                }
+
+                scm {
+
+                    url = "https://github.com/manuelddahmen/empty3-library-3d"
+                    connection = "scm:git:https://github.com/manuelddahmen/empty3-library-3d.git"
+                    developerConnection = "scm:git:https://github.com/manuelddahmen/empty3-library-3d.git"
+
+                }
+                developers {
+                    developer {
+                        email = "manuel.dahmen@gmx.com"
+                        name = "Manuel Daniel Dahmen"
+
+                        url = "https://empty3.one"
+                        id = "manuelddahmen"
+                    }
+                }
+
+            }
+        }
+    }
+
+    repositories {
+        /*  maven {
+              name = "JetBrainsSpaceEmpty3"
+              url = "https://maven.pkg.jetbrains.space/empty3/p/empty3/maven/maven"
+              credentials {
+                  // Automation has a special account for authentication in Space
+                  // account credentials are accessible via env vars
+                  username = load.get("spaceUsername")
+                  password = load.get("spacePassword")
+              }
+
+          }*/
+        /*maven {
+            name = "OSSRH"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = load.get("ossrhUsername")
+                password = load.get("ossrhPassword")
+            }
+
+        }*/
+/*
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/manuelddahmen/empty3_miror")
+            credentials {
+                username = load.get("GITHUB_ACTOR")
+                password = load.get("GITHUB_TOKEN")
+            }
+        }*/
+        maven {
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+
+    }
+}
+
+jreleaser {
+    signing {
+
+        active = 'ALWAYS'
+        armored = true
+        mode = 'FILE'
+        publicKey = load.get('signing.publicKeyPath')
+        passphrase = load.get('signing.passphrase')
+        secretKey = load.get('signing.secretKey')
+        release.github.token = load.get('release.github.token')
+
+    }
+    project {
+        name = 'commons-mp'
+        java.artifactId = 'commons-mp'
+        java.groupId = 'one.empty3.libs'
+        java.version = '2024.10.6'
+        version = '2024.10.6'
+        license = 'Apache-2.0'
+        authors = ['Manuel D DAHMEN']
+        description = 'Common definitions and interfaces for Android and Desktop'
+        copyright = "Author : Manuel D. Dahmen, License: Apache-2"
+        icon {
+            // Publicly available URL. PNG format is preferred.
+            //
+            url = 'https://empty3.one/favicon.ico'
+            // Marks this icon as the primary one.
+            // Only a single icon may be set as primary.
+            //
+            primary = true
+            // Image width in pixels.
+            //
+            width = 47
+            // Image height in pixels.
+            //
+            height = 47
+        }
+    }
+
+    deploy {
+        maven {
+            // Enable or disable all configured deployers.
+            // Supported values are [`NEVER`, `ALWAYS`, `RELEASE`, `SNAPSHOT`].
+            // Defaults to `ALWAYS`.
+            //
+            active = 'ALWAYS'
+            pomchecker {
+                // Defines the tool version to use.
+                //
+                version = '1.11.0'
+
+                // Fail the release if pomchecker outputs a warning.
+                // Defaults to `true`.
+                //
+                failOnWarning = false
+
+                // Fail the release if pomchecker outputs an error.
+                // Defaults to `true`.
+                //
+                failOnError = false
+            }
+            mavenCentral {
+                app {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    gitRootSearch = false
+                    stagingRepository('build/staging-deploy')
+                    username = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_USERNAME')
+                    authorization = 'BASIC'
+                    // Password for login into the MAVENCENTRAL service.
+                    //
+                    password = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_PASSWORD')
+                    // List of directories where staged artifacts can be found.
+                    stagingRepository('build/staging-deploy')
+
+                    // Defines the connection timeout in seconds.
+                    // Defaults to `20`.
+                    //
+                    connectTimeout = 20
+
+                    // Defines the read timeout in seconds.
+                    // Defaults to `60`.
+                    //
+                    readTimeout = 60
+
+                    // Additional properties used when evaluating templates.
+                    // Key will be capitalized and prefixed with `mavenCentral`, i.e, `mavenCentralFoo`.
+                    //
+                    extraProperties.put('foo', 'bar')
+
+                    // Registered publication namespace.
+                    // Defaults to `${project.java.groupId}`.
+                    //
+                    namespace = 'one.empty3'
+
+                    // Deployment identifier used for publication.
+                    //
+                    deploymentId = 'd54226c8-5abd-4679-bc76-451c3ae38bfb'
+
+                    // Time to wait between state transition checks, in seconds.
+                    // Defaults to `10`.
+                    //
+                    retryDelay = 10
+
+                    // Maximum number of attempts to verify state transition.
+                    // Defaults to `60`.
+                    //
+                    maxRetries = 60
+                }
+            }
+        }
+    }
+    upload {
+        // Enable or disable all configured uploaders.
+        // Supported values are [`NEVER`, `ALWAYS`, `RELEASE`, `SNAPSHOT`].
+        // Defaults to `ALWAYS`.
+        //
+        active = 'ALWAYS'
+    }
+}
