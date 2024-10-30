@@ -10,6 +10,19 @@ plugins {
 group = 'one.empty3.libs'
 version = 'commons-mp'
 
+
+
+kotlin {
+    jvmToolchain(21)
+}
+sourceCompatibility = 21
+targetCompatibility = 21
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+}
+
+
 repositories {
     mavenCentral()
 }
@@ -97,58 +110,37 @@ repositories {
     flatDir dirs: "${rootDir}/lib"
 }
 
+tasks.register('copyTask', Copy) {
+    // duplicateStrategy = DuplicatesStrategy.WARN
+    from 'src/main/java/'
+    into 'build/classes/java/main'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+tasks.named('jar') {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
+}
 
 dependencies {
-    def googleJavaFormatVersion = '1.6'
-//    implementation(kotlin("stdlib"))
-    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-    implementation 'junit:junit:4.13.2'
-    testImplementation project(path: ':')
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'junit:junit:4.13.2'
-    def jogl = '2.3.2'
-    implementation "org.jogamp.jogl:jogl-all:$jogl"
-    implementation group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: "$jogl"
-    implementation group: 'org.jogamp.jogl', name: 'jogl-all-main', version: "$jogl"
-    //implementation 'ai.djl:api:0.21.0'
-    implementation("org.jcodec:jcodec-javase:0.2.5")
-    implementation("org.jcodec:jcodec-javase:0.2.5")
-    implementation("org.jogamp.jogl:jogl-all-main:$jogl")
-    implementation("com.miglayout:miglayout:3.7.4")
-    implementation("xom:xom:1.3.9")
-    implementation("com.jgoodies:jgoodies-common:1.8.1")
-    implementation("com.jgoodies:jgoodies-forms:1.9.0")
-    implementation('xerces:xercesImpl:2.12.2')
-    implementation 'com.formdev:flatlaf:3.0'
-    implementation("org.jdesktop:beansbinding:1.2.1")
-    implementation("com.github.sarxos:webcam-capture:0.3.12")
-    implementation group: 'commons-net', name: 'commons-net', version: '3.9.0'
-    implementation("org.jdom:jdom2:2.0.6.1")
-    implementation("org.apache.servicemix.bundles:org.apache.servicemix.bundles.jdom:2.0.6.1_1")
-    implementation 'com.jetbrains.intellij.java:java-gui-forms-rt:203.7148.30'
-    implementation 'org.jetbrains:annotations:24.0.0'
-    testImplementation('org.junit.jupiter:junit-jupiter:5.9.2')
-    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20"
-    implementation 'org.apache.santuario:xmlsec:4.0.1'
-    implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    implementation platform('com.google.cloud:libraries-bom:26.39.0')
-    implementation 'com.google.cloud:google-cloud-vision'
-    implementation 'com.google.apis:google-api-services-vision:v1-rev20231219-2.0.0'
-    implementation 'com.google.cloud:google-cloud-vision:3.41.0'
-    implementation platform('com.google.cloud:libraries-bom:26.38.0')
-    implementation 'com.google.cloud:google-cloud-storage'
-    implementation "com.google.apis:google-api-services-vision:v1-rev20231219-2.0.0"
-    implementation "com.google.auth:google-auth-library-oauth2-http:1.23.0"
-    implementation "com.google.guava:guava:16.0.1"
-    implementation "com.google.http-client:google-http-client-jackson2:1.44.2"
 }
-def versionName = '2024.9.2'
+def versionName = '0.0.2'
 publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'one.empty3.libs'
             artifactId = 'commmons-mp'
-            version = '2024.10.7'
+            version = '0.0.2'
             from components.java
             project.tasks.withType(Sign) {
                 signatures.all {
@@ -161,9 +153,8 @@ publishing {
                 name = 'empty3-library-3d'
                 description = 'Common class for images and colors'
                 packaging 'jar'
-                url = "https://github.com/manuelddahmen/empty3-library-3d"
-                version '2024.9.22'
-                inceptionYear = '2008'
+                url = "https://github.com/manuelddahmen/commons-mp"
+                version '0.0.2'
                 licenses {
                     license {
                         name = "Apache version 2"
@@ -174,9 +165,9 @@ publishing {
 
                 scm {
 
-                    url = "https://github.com/manuelddahmen/empty3-library-3d"
-                    connection = "scm:git:https://github.com/manuelddahmen/empty3-library-3d.git"
-                    developerConnection = "scm:git:https://github.com/manuelddahmen/empty3-library-3d.git"
+                    url = "https://github.com/manuelddahmen/commons-mp"
+                    connection = "scm:git:https://github.com/manuelddahmen/commons-mp.git"
+                    developerConnection = "scm:git:https://github.com/manuelddahmen/commons-mp.git"
 
                 }
                 developers {
@@ -224,7 +215,7 @@ publishing {
             }
         }*/
         maven {
-            url = layout.buildDirectory.dir('staging-deploy')
+            url = layout.buildDirectory.dir('target/staging-deploy')
         }
 
     }
@@ -246,8 +237,8 @@ jreleaser {
         name = 'commons-mp'
         java.artifactId = 'commons-mp'
         java.groupId = 'one.empty3.libs'
-        java.version = '2024.10.6'
-        version = '2024.10.6'
+        java.version = '0.0.2'
+        version = '0.0.2'
         license = 'Apache-2.0'
         authors = ['Manuel D DAHMEN']
         description = 'Common definitions and interfaces for Android and Desktop'
@@ -296,14 +287,13 @@ jreleaser {
                     active = 'ALWAYS'
                     url = 'https://central.sonatype.com/api/v1/publisher'
                     gitRootSearch = false
-                    stagingRepository('build/staging-deploy')
-                    username = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_USERNAME')
-                    authorization = 'BASIC'
+//                    username = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_USERNAME')
+//                    authorization = 'BASIC'
                     // Password for login into the MAVENCENTRAL service.
                     //
-                    password = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_PASSWORD')
+//                    password = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_PASSWORD')
                     // List of directories where staged artifacts can be found.
-                    stagingRepository('build/staging-deploy')
+                    stagingRepository('target/staging-deploy')
 
                     // Defines the connection timeout in seconds.
                     // Defaults to `20`.
@@ -318,16 +308,14 @@ jreleaser {
                     // Additional properties used when evaluating templates.
                     // Key will be capitalized and prefixed with `mavenCentral`, i.e, `mavenCentralFoo`.
                     //
-                    extraProperties.put('foo', 'bar')
-
                     // Registered publication namespace.
                     // Defaults to `${project.java.groupId}`.
                     //
-                    namespace = 'one.empty3'
+                    namespace = 'one.empty3.libs'
 
                     // Deployment identifier used for publication.
                     //
-                    deploymentId = 'd54226c8-5abd-4679-bc76-451c3ae38bfb'
+                    deploymentId = '242a09a3-285e-426f-a487-3c2287b079ad'
 
                     // Time to wait between state transition checks, in seconds.
                     // Defaults to `10`.
