@@ -4,7 +4,7 @@ import java.awt.*;
 
 public interface IColorMp {
 
-    public Object getColorObject();
+    public IColorMp getColorObject();
 
     public int getColor();
 

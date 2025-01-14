@@ -8,7 +8,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.24'
 }
 group = 'one.empty3.libs'
-version = 'commons-mp'
+version = '0.0.6'
 
 
 
@@ -30,6 +30,10 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+//    implementation 'org.springframework.boot:spring-boot-starter:3.3.2'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.9.2'
+
 }
 
 test {
@@ -134,13 +138,13 @@ tasks.named('jar') {
 
 dependencies {
 }
-def versionName = '0.0.2'
+def versionName = '0.0.6'
 publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'one.empty3.libs'
-            artifactId = 'commmons-mp'
-            version = '0.0.2'
+            artifactId = 'commons-mp'
+            version = '0.0.6'
             from components.java
             project.tasks.withType(Sign) {
                 signatures.all {
@@ -150,11 +154,11 @@ publishing {
 
             // The pom can be enriched as usual
             pom {
-                name = 'empty3-library-3d'
+                name = 'commons-mp'
                 description = 'Common class for images and colors'
                 packaging 'jar'
                 url = "https://github.com/manuelddahmen/commons-mp"
-                version '0.0.2'
+                version '0.0.6'
                 licenses {
                     license {
                         name = "Apache version 2"
@@ -237,8 +241,8 @@ jreleaser {
         name = 'commons-mp'
         java.artifactId = 'commons-mp'
         java.groupId = 'one.empty3.libs'
-        java.version = '0.0.2'
-        version = '0.0.2'
+        java.version = '0.0.6'
+        version = '0.0.6'
         license = 'Apache-2.0'
         authors = ['Manuel D DAHMEN']
         description = 'Common definitions and interfaces for Android and Desktop'
@@ -293,7 +297,7 @@ jreleaser {
                     //
 //                    password = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_PASSWORD')
                     // List of directories where staged artifacts can be found.
-                    stagingRepository('target/staging-deploy')
+                    stagingRepository('staging-deploy')
 
                     // Defines the connection timeout in seconds.
                     // Defaults to `20`.
