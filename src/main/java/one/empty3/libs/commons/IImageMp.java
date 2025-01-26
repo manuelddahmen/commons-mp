@@ -15,7 +15,14 @@ public interface IImageMp {
 
     public int getRgb(int x, int y);
 
-    public IImageMp getFromFile(File file);
+    public static IImageMp getFromFile(File file) {
+        return null;
+    }
+
+
+    public static IImageMp loadFile(File path) {
+        return null;
+    }
 
     public boolean saveToFile(String path);
 

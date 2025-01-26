@@ -8,7 +8,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.24'
 }
 group = 'one.empty3.libs'
-version = '0.0.6'
+version = '0.0.8'
 
 
 
@@ -69,9 +69,11 @@ jar {
 def load = properties
 java {
     withSourcesJar()
+    withJavadocJar()
 }
-
-
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
 signing {
     def signingKey = load.get("signing.keyId")
     def signingPassword = load.get("signing.password")
@@ -79,8 +81,8 @@ signing {
     useGpgCmd()
     //useInMemoryPgpKeys(signingKey, signingPassword)
 
-    sign publishing.publications
-    sign configurations.archives
+    //sign publishing.publications
+    //sign configurations.archives
 }
 
 
@@ -138,13 +140,13 @@ tasks.named('jar') {
 
 dependencies {
 }
-def versionName = '0.0.6'
+def versionName = '0.0.8'
 publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'one.empty3.libs'
             artifactId = 'commons-mp'
-            version = '0.0.6'
+            version = '0.0.8'
             from components.java
             project.tasks.withType(Sign) {
                 signatures.all {
@@ -158,7 +160,7 @@ publishing {
                 description = 'Common class for images and colors'
                 packaging 'jar'
                 url = "https://github.com/manuelddahmen/commons-mp"
-                version '0.0.6'
+                version '0.0.8'
                 licenses {
                     license {
                         name = "Apache version 2"
@@ -219,11 +221,45 @@ publishing {
             }
         }*/
         maven {
-            url = layout.buildDirectory.dir('target/staging-deploy')
+            url = layout.buildDirectory.dir('staging-deploy')
         }
 
     }
 }
+
+
+
+repositories {
+    google()
+    mavenCentral()
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2/")
+    }
+    maven {
+        url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    }
+    maven {
+        url = uri("https://repository.sonatype.org/content/groups/public/")
+    }
+    maven {
+        url = uri("https://mvnrepository.com/")
+    }
+    maven {
+        url = uri("https://maven.scijava.org/content/repositories/public/")
+    }
+    maven {
+        url = uri("https://plugins.gradle.org/m2/")
+    }
+    maven {
+        url "https://maven.jzy3d.org/releases/"
+    }
+    maven {
+        url "https://www.jetbrains.com/intellij-repository/releases"
+    }
+    flatDir dirs: "${rootDir}/lib"
+}
+
+
 
 jreleaser {
     signing {
@@ -241,8 +277,8 @@ jreleaser {
         name = 'commons-mp'
         java.artifactId = 'commons-mp'
         java.groupId = 'one.empty3.libs'
-        java.version = '0.0.6'
-        version = '0.0.6'
+        java.version = '0.0.8'
+        version = '0.0.8'
         license = 'Apache-2.0'
         authors = ['Manuel D DAHMEN']
         description = 'Common definitions and interfaces for Android and Desktop'
@@ -291,13 +327,13 @@ jreleaser {
                     active = 'ALWAYS'
                     url = 'https://central.sonatype.com/api/v1/publisher'
                     gitRootSearch = false
-//                    username = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_USERNAME')
-//                    authorization = 'BASIC'
+                    username = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_USERNAME')
+                    password = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_PASSWORD')
+                    authorization = 'BASIC'
                     // Password for login into the MAVENCENTRAL service.
                     //
-//                    password = propertiesReleaseConfig.get('JRELEASER_MAVENCENTRAL_PASSWORD')
                     // List of directories where staged artifacts can be found.
-                    stagingRepository('staging-deploy')
+                    stagingRepository('build/staging-deploy')
 
                     // Defines the connection timeout in seconds.
                     // Defaults to `20`.
@@ -309,17 +345,15 @@ jreleaser {
                     //
                     readTimeout = 60
 
-                    // Additional properties used when evaluating templates.
-                    // Key will be capitalized and prefixed with `mavenCentral`, i.e, `mavenCentralFoo`.
-                    //
+
                     // Registered publication namespace.
                     // Defaults to `${project.java.groupId}`.
                     //
-                    namespace = 'one.empty3.libs'
+                    namespace = 'one.empty3'
 
                     // Deployment identifier used for publication.
                     //
-                    deploymentId = '242a09a3-285e-426f-a487-3c2287b079ad'
+                    deploymentId = '27d4cb92-0141-4a3f-b2e1-38c801bfafb0'
 
                     // Time to wait between state transition checks, in seconds.
                     // Defaults to `10`.
