@@ -1,8 +1,8 @@
 package one.empty3.libs.commons;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public interface IImageMp {
     int [][] imagetoMatrix = new int[1][1];
@@ -18,7 +18,10 @@ public interface IImageMp {
     public static IImageMp getFromFile(File file) {
         return null;
     }
-
+    public static IImageMp getFromInputStream(InputStream stream) {
+        return null;
+    }
+    public boolean toOutputStream(OutputStream stream);
 
     public static IImageMp loadFile(File path) {
         return null;
