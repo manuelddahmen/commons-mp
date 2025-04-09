@@ -10,6 +10,8 @@ public interface IColorMp {
 
     public int getRGB();
 
+    public int getRgb();
+
     public int getRed();
 
     public int getGreen();
