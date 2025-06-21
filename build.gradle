@@ -8,7 +8,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.24'
 }
 group = 'one.empty3.libs'
-version = '0.0.10'
+version = '0.0.11'
 
 
 

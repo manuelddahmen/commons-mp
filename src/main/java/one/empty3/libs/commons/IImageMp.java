@@ -1,6 +1,7 @@
 package one.empty3.libs.commons;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -15,19 +16,19 @@ public interface IImageMp {
 
     public int getRgb(int x, int y);
 
-    public static IImageMp getFromFile(File file) {
+    public static IImageMp getFromFile(File file) throws IOException {
         return null;
     }
-    public static IImageMp getFromInputStream(InputStream stream) {
+    public static IImageMp getFromInputStream(InputStream stream) throws IOException {
         return null;
     }
     public boolean toOutputStream(OutputStream stream);
 
-    public static IImageMp loadFile(File path) {
+    public static IImageMp loadFile(File path) throws IOException {
         return null;
     }
 
-    public boolean saveToFile(String path);
+    public boolean saveToFile(String path) throws IOException;
 
     public int getWidth();
 
