@@ -22,7 +22,7 @@ public interface IImageMp {
     public static IImageMp getFromInputStream(InputStream stream) throws IOException {
         return null;
     }
-    public boolean toOutputStream(OutputStream stream);
+    public boolean toOutputStream(OutputStream stream) throws IOException;
 
     public static IImageMp loadFile(File path) throws IOException {
         return null;
