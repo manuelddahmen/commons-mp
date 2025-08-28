@@ -10,6 +10,7 @@ public interface IImageMp {
 
     public void setImageToMatrix(int[][] imagetoMatrix);
 
+    
     public int[][] getMatrix();
 
     public void setRgb(int x, int y, int rgb);
