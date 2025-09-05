@@ -1,5 +1,6 @@
 package one.empty3.libs.commons;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +28,11 @@ public interface IImageMp {
 
     public static IImageMp loadFile(File path) throws IOException {
         return null;
+    }
+
+    public static boolean saveFileAs(BufferedImage image, String type, File out,
+                                     boolean shouldOverwrite) {
+        return false;
     }
 
     public boolean saveToFile(String path) throws IOException;

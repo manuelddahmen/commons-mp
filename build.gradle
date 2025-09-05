@@ -5,10 +5,10 @@ plugins {
     id 'maven-publish'
     id 'org.jreleaser' version '1.14.0'
     id 'signing'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.24'
+    id 'org.jetbrains.kotlin.jvm' version '2.2.10'
 }
 group = 'one.empty3.libs'
-version = '0.0.12'
+version = '0.0.13'
 
 
 
@@ -140,13 +140,13 @@ tasks.named('jar') {
 
 dependencies {
 }
-def versionName = '0.0.12'
+def versionName = '0.0.13'
 publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'one.empty3.libs'
             artifactId = 'commons-mp'
-            version = '0.0.12'
+            version = '0.0.13'
             from components.java
             project.tasks.withType(Sign) {
                 signatures.all {
@@ -160,7 +160,7 @@ publishing {
                 description = 'Common class for images and colors'
                 packaging 'jar'
                 url = "https://github.com/manuelddahmen/commons-mp"
-                version '0.0.12'
+                version '0.0.13'
                 licenses {
                     license {
                         name = "Apache version 2"
@@ -277,8 +277,8 @@ jreleaser {
         name = 'commons-mp'
         java.artifactId = 'commons-mp'
         java.groupId = 'one.empty3.libs'
-        java.version = '0.0.12'
-        version = '0.0.12'
+        java.version = '0.0.13'
+        version = '0.0.13'
         license = 'Apache-2.0'
         authors = ['Manuel D DAHMEN']
         description = 'Common definitions and interfaces for Android and Desktop'
