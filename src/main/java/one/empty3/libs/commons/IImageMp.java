@@ -30,6 +30,7 @@ public interface IImageMp {
     }
 
     public boolean saveToFile(String path) throws IOException;
+    public boolean saveFile(File path) throws IOException;
 
     public int getWidth();
 
